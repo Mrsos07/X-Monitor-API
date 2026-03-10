@@ -44,34 +44,48 @@ async def init_browser():
             "--no-sandbox",
             "--disable-blink-features=AutomationControlled",
             "--disable-dev-shm-usage",
+            "--disable-gpu",
+            "--disable-extensions",
+            "--disable-background-networking",
+            "--disable-default-apps",
+            "--disable-sync",
+            "--disable-translate",
+            "--disable-software-rasterizer",
+            "--disable-backgrounding-occluded-windows",
+            "--disable-renderer-backgrounding",
+            "--disable-component-update",
+            "--no-first-run",
+            "--no-zygote",
+            "--single-process",
+            "--js-flags=--max-old-space-size=128",
+            "--renderer-process-limit=1",
+            "--memory-pressure-off",
         ]
     )
 
     cookies = _load_cookies()
 
+    _ctx_opts = dict(
+        user_agent=(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/124.0.0.0 Safari/537.36"
+        ),
+        viewport={"width": 800, "height": 600},
+        locale="en-US",
+    )
+
     if cookies:
         logger.info(f"🍪 تحميل {len(cookies)} كوكيز من {settings.COOKIES_FILE}")
-        _context = await _browser.new_context(
-            user_agent=(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/124.0.0.0 Safari/537.36"
-            ),
-            viewport={"width": 1280, "height": 900},
-            locale="en-US",
-        )
+        _context = await _browser.new_context(**_ctx_opts)
         await _context.add_cookies(cookies)
     else:
         logger.warning("⚠️  لا يوجد ملف كوكيز — سيعمل بدون تسجيل دخول (محدودية)")
-        _context = await _browser.new_context(
-            user_agent=(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/124.0.0.0 Safari/537.36"
-            ),
-            viewport={"width": 1280, "height": 900},
-            locale="en-US",
-        )
+        _context = await _browser.new_context(**_ctx_opts)
+
+    # حظر الصور والوسائط لتقليل استهلاك الذاكرة
+    await _context.route("**/*.{png,jpg,jpeg,gif,svg,webp,ico,woff,woff2,ttf}", lambda route: route.abort())
+    await _context.route("**/{video,media}/**", lambda route: route.abort())
 
     logger.success("✅ المتصفح جاهز")
 

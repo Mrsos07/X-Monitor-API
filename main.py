@@ -104,7 +104,7 @@ async def verify_api_key(x_api_key: Optional[str] = Header(None)):
 #  الجذر  &  الصحة
 # ─────────────────────────────────────────────────────────────
 
-@app.get("/", tags=["عام"])
+@app.api_route("/", methods=["GET", "HEAD"], tags=["عام"])
 async def root():
     return {
         "name":    settings.APP_TITLE,
@@ -114,7 +114,7 @@ async def root():
     }
 
 
-@app.get("/health", tags=["عام"])
+@app.api_route("/health", methods=["GET", "HEAD"], tags=["عام"])
 async def health():
     stats = await db.get_stats()
     return {

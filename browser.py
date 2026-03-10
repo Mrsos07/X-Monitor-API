@@ -149,16 +149,34 @@ def _load_cookies() -> List[Dict]:
 
 async def close_browser():
     global _playwright, _browser, _context
-    if _context:
-        await _context.close()
-        _context = None
-    if _browser:
-        await _browser.close()
-        _browser = None
-    if _playwright:
-        await _playwright.stop()
-        _playwright = None
+    try:
+        if _context:
+            await _context.close()
+    except Exception:
+        pass
+    _context = None
+    try:
+        if _browser:
+            await _browser.close()
+    except Exception:
+        pass
+    _browser = None
+    try:
+        if _playwright:
+            await _playwright.stop()
+    except Exception:
+        pass
+    _playwright = None
     logger.info("🛑 المتصفح أُغلق")
+
+
+async def restart_browser():
+    """إعادة تشغيل المتصفح بعد انهياره"""
+    logger.warning("🔄 إعادة تشغيل المتصفح ...")
+    await close_browser()
+    await asyncio.sleep(2)
+    await init_browser()
+    logger.success("✅ المتصفح أُعيد تشغيله بنجاح")
 
 
 # ─────────────────────────────────────────────────────────────

@@ -99,7 +99,17 @@ async def _monitor_account_loop(account: Dict):
             logger.info(f"❌ إلغاء مراقبة @{username}")
             break
         except Exception as e:
-            logger.error(f"خطأ مراقبة @{username}: {e}")
+            err_msg = str(e)
+            logger.error(f"خطأ مراقبة @{username}: {err_msg}")
+
+            # إعادة تشغيل المتصفح عند انهياره
+            if "Target" in err_msg or "closed" in err_msg or "Browser" in err_msg:
+                try:
+                    await browser.restart_browser()
+                except Exception as re:
+                    logger.error(f"فشل إعادة تشغيل المتصفح: {re}")
+                    await asyncio.sleep(30)
+                    continue
 
         # أعد تحميل الإعدادات (قد تتغير الفترة)
         fresh = await db.get_account(username)

@@ -77,13 +77,29 @@ async def init_browser():
 
 
 def _load_cookies() -> List[Dict]:
-    path = settings.COOKIES_FILE
-    if not os.path.exists(path):
-        return []
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            raw = json.load(f)
+    raw = None
 
+    # أولاً: محاولة التحميل من متغير البيئة (مناسب لـ Render)
+    if settings.COOKIES_JSON:
+        try:
+            raw = json.loads(settings.COOKIES_JSON)
+            logger.info("🍪 تحميل الكوكيز من متغير البيئة COOKIES_JSON")
+        except Exception as e:
+            logger.error(f"خطأ في قراءة COOKIES_JSON: {e}")
+
+    # ثانياً: محاولة التحميل من الملف
+    if raw is None:
+        path = settings.COOKIES_FILE
+        if not os.path.exists(path):
+            return []
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+        except Exception as e:
+            logger.error(f"خطأ في قراءة ملف الكوكيز: {e}")
+            return []
+
+    try:
         # دعم صيغة Netscape / EditThisCookie / JSON مباشر
         if isinstance(raw, list):
             cookies = []

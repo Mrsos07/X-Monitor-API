@@ -22,6 +22,7 @@ class Settings(BaseSettings):
 
     # ── ملف الكوكيز ───────────────────────────────────────
     COOKIES_FILE: str = "cookies.json"
+    COOKIES_JSON: str = ""  # محتوى الكوكيز كنص JSON (بديل عن الملف — مناسب لـ Render)
 
     # ── المراقبة ──────────────────────────────────────────
     MONITOR_INTERVAL_SECONDS: int = 30      # فترة الاستطلاع الافتراضية

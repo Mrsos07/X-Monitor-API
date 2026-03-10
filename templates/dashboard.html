@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Monitor — لوحة التحكم</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Tajawal', sans-serif; }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+        .glow { box-shadow: 0 0 30px rgba(29,155,240,0.1); }
+        .card-hover { transition: all 0.3s; }
+        .card-hover:hover { border-color: rgba(29,155,240,0.3); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        input:focus, select:focus { box-shadow: 0 0 0 2px rgba(29,155,240,0.5); }
+        .pulse-dot { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+        .toast { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+    </style>
+</head>
+<body class="bg-[#0a0a0f] min-h-screen text-white">
+    <!-- Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-0 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-[120px]"></div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden toast">
+        <div id="toast-content" class="px-5 py-3 rounded-xl text-sm font-500 shadow-2xl"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="relative border-b border-white/5 bg-black/40 backdrop-blur-xl sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <svg class="w-4.5 h-4.5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-700">X-Monitor</h1>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="status-badge" class="flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs">
+                    <span class="w-2 h-2 rounded-full bg-green-400 pulse-dot"></span>
+                    <span class="text-green-400">يعمل</span>
+                </div>
+                <a href="/logout" class="text-gray-400 hover:text-red-400 transition-colors text-sm flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    خروج
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+            <div class="glass rounded-xl p-4 card-hover">
+                <p class="text-gray-400 text-xs mb-1">الحسابات النشطة</p>
+                <p id="stat-accounts" class="text-2xl font-800 text-blue-400">0</p>
+            </div>
+            <div class="glass rounded-xl p-4 card-hover">
+                <p class="text-gray-400 text-xs mb-1">إجمالي المنشورات</p>
+                <p id="stat-posts" class="text-2xl font-800 text-green-400">0</p>
+            </div>
+            <div class="glass rounded-xl p-4 card-hover">
+                <p class="text-gray-400 text-xs mb-1">آخر 24 ساعة</p>
+                <p id="stat-24h" class="text-2xl font-800 text-purple-400">0</p>
+            </div>
+            <div class="glass rounded-xl p-4 card-hover">
+                <p class="text-gray-400 text-xs mb-1">Webhooks</p>
+                <p id="stat-webhooks" class="text-2xl font-800 text-amber-400">0</p>
+            </div>
+        </div>
+
+        <!-- Add Account -->
+        <div class="glass rounded-2xl p-6 mb-8 glow">
+            <h2 class="text-lg font-700 mb-5 flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                إضافة حساب للمراقبة
+            </h2>
+            <form id="add-form" class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end">
+                <div class="sm:col-span-4">
+                    <label class="block text-gray-300 text-sm font-500 mb-2">اسم المستخدم</label>
+                    <div class="relative">
+                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">@</span>
+                        <input type="text" id="username" required
+                               class="w-full bg-white/5 border border-white/10 rounded-xl pr-8 pl-4 py-3 text-white placeholder-gray-500 outline-none transition-all focus:border-blue-500/50"
+                               placeholder="اسم الحساب">
+                    </div>
+                </div>
+                <div class="sm:col-span-3">
+                    <label class="block text-gray-300 text-sm font-500 mb-2">فترة الفحص (ثانية)</label>
+                    <input type="number" id="interval" value="30" min="10" max="3600"
+                           class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none transition-all focus:border-blue-500/50">
+                </div>
+                <div class="sm:col-span-3">
+                    <label class="block text-gray-300 text-sm font-500 mb-2">Webhook (اختياري)</label>
+                    <input type="url" id="webhook-url"
+                           class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 outline-none transition-all focus:border-blue-500/50"
+                           placeholder="https://...">
+                </div>
+                <div class="sm:col-span-2">
+                    <button type="submit" id="add-btn"
+                            class="w-full bg-gradient-to-l from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-700 py-3 rounded-xl transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                        إضافة
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Accounts List -->
+        <div class="glass rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="text-lg font-700 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    الحسابات المراقَبة
+                </h2>
+                <button onclick="loadAccounts()" class="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    تحديث
+                </button>
+            </div>
+
+            <div id="accounts-list" class="space-y-3">
+                <div class="text-center py-12 text-gray-500">
+                    <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>
+                    جاري التحميل...
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Posts -->
+        <div class="glass rounded-2xl p-6 mt-8">
+            <h2 class="text-lg font-700 mb-5 flex items-center gap-2">
+                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+                آخر المنشورات
+            </h2>
+            <div id="posts-list" class="space-y-3">
+                <div class="text-center py-8 text-gray-500 text-sm">جاري التحميل...</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_KEY = '{{ api_key }}';
+        const headers = { 'X-API-Key': API_KEY, 'Content-Type': 'application/json' };
+
+        // Toast
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            const c = document.getElementById('toast-content');
+            c.textContent = msg;
+            c.className = 'px-5 py-3 rounded-xl text-sm font-500 shadow-2xl ' +
+                (type === 'success' ? 'bg-green-500/20 border border-green-500/30 text-green-300' :
+                 type === 'error'   ? 'bg-red-500/20 border border-red-500/30 text-red-300' :
+                                      'bg-blue-500/20 border border-blue-500/30 text-blue-300');
+            t.classList.remove('hidden');
+            setTimeout(() => t.classList.add('hidden'), 3500);
+        }
+
+        // Load Stats
+        async function loadStats() {
+            try {
+                const r = await fetch('/stats', { headers });
+                const d = await r.json();
+                document.getElementById('stat-accounts').textContent = d.active_accounts;
+                document.getElementById('stat-posts').textContent = d.total_posts;
+                document.getElementById('stat-24h').textContent = d.posts_last_24h;
+                document.getElementById('stat-webhooks').textContent = d.total_webhooks;
+            } catch(e) { console.error(e); }
+        }
+
+        // Load Accounts
+        async function loadAccounts() {
+            try {
+                const r = await fetch('/accounts', { headers });
+                const accounts = await r.json();
+                const list = document.getElementById('accounts-list');
+
+                if (accounts.length === 0) {
+                    list.innerHTML = `
+                        <div class="text-center py-12 text-gray-500">
+                            <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>
+                            <p>لا توجد حسابات مراقبة بعد</p>
+                            <p class="text-xs mt-1">أضف حساباً من النموذج أعلاه</p>
+                        </div>`;
+                    return;
+                }
+
+                list.innerHTML = accounts.map(a => `
+                    <div class="flex items-center justify-between bg-white/[0.02] border border-white/5 rounded-xl p-4 card-hover">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br ${a.is_active ? 'from-blue-500/20 to-blue-600/20 text-blue-400' : 'from-gray-500/20 to-gray-600/20 text-gray-500'} flex items-center justify-center font-700 text-sm">
+                                @
+                            </div>
+                            <div>
+                                <a href="https://x.com/${a.username}" target="_blank" class="font-700 hover:text-blue-400 transition-colors">@${a.username}</a>
+                                <div class="flex items-center gap-3 text-xs text-gray-500 mt-0.5">
+                                    <span>كل ${a.interval_seconds}ث</span>
+                                    <span>•</span>
+                                    <span>${a.posts_collected} منشور</span>
+                                    ${a.last_checked ? `<span>•</span><span>آخر فحص: ${new Date(a.last_checked).toLocaleTimeString('ar-SA')}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 rounded-full text-xs ${a.is_active ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-gray-500/10 text-gray-400 border border-gray-500/20'}">
+                                ${a.is_active ? 'نشط' : 'متوقف'}
+                            </span>
+                            <button onclick="checkNow('${a.username}')" title="فحص فوري"
+                                    class="p-2 rounded-lg hover:bg-blue-500/10 text-gray-400 hover:text-blue-400 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            </button>
+                            <button onclick="pauseAccount('${a.username}')" title="إيقاف مؤقت"
+                                    class="p-2 rounded-lg hover:bg-amber-500/10 text-gray-400 hover:text-amber-400 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </button>
+                            <button onclick="deleteAccount('${a.username}')" title="حذف"
+                                    class="p-2 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-400 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) { console.error(e); }
+        }
+
+        // Load Posts
+        async function loadPosts() {
+            try {
+                const r = await fetch('/posts?limit=10', { headers });
+                const posts = await r.json();
+                const list = document.getElementById('posts-list');
+
+                if (posts.length === 0) {
+                    list.innerHTML = '<div class="text-center py-8 text-gray-500 text-sm">لا توجد منشورات بعد</div>';
+                    return;
+                }
+
+                list.innerHTML = posts.map(p => `
+                    <div class="bg-white/[0.02] border border-white/5 rounded-xl p-4 card-hover">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start gap-3 flex-1 min-w-0">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 text-xs font-700 shrink-0">@</div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="font-700 text-sm">@${p.username}</span>
+                                        <span class="text-gray-500 text-xs">${p.created_at ? new Date(p.created_at).toLocaleString('ar-SA', {dateStyle:'short', timeStyle:'short'}) : ''}</span>
+                                    </div>
+                                    <p class="text-gray-300 text-sm leading-relaxed break-words">${p.text || '(بدون نص)'}</p>
+                                    ${p.media_urls && p.media_urls.length > 0 ? `<div class="flex gap-2 mt-2">${p.media_urls.map(u => `<img src="${u}" class="h-20 rounded-lg object-cover border border-white/10">`).join('')}</div>` : ''}
+                                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                                        <span>❤️ ${p.likes}</span>
+                                        <span>🔄 ${p.retweets}</span>
+                                        <span>💬 ${p.replies}</span>
+                                        <span>👁 ${p.views}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="${p.tweet_url}" target="_blank" class="text-gray-500 hover:text-blue-400 transition-colors shrink-0 mr-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) { console.error(e); }
+        }
+
+        // Add Account
+        document.getElementById('add-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value.replace('@', '').trim();
+            const interval = parseInt(document.getElementById('interval').value) || 30;
+            const webhookUrl = document.getElementById('webhook-url').value.trim() || null;
+
+            if (!username) return;
+
+            const btn = document.getElementById('add-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>';
+
+            try {
+                const body = { username, interval_seconds: interval };
+                if (webhookUrl) body.webhook_url = webhookUrl;
+
+                const r = await fetch('/accounts', {
+                    method: 'POST', headers, body: JSON.stringify(body)
+                });
+
+                if (r.ok) {
+                    showToast(`تمت إضافة @${username} للمراقبة ✅`);
+                    document.getElementById('username').value = '';
+                    document.getElementById('webhook-url').value = '';
+                    loadAccounts();
+                    loadStats();
+                } else {
+                    const err = await r.json();
+                    showToast(err.detail || 'فشل في الإضافة', 'error');
+                }
+            } catch(e) {
+                showToast('خطأ في الاتصال', 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg> إضافة';
+        });
+
+        // Actions
+        async function checkNow(username) {
+            await fetch(`/accounts/${username}/check`, { method: 'POST', headers });
+            showToast(`بدأ الفحص الفوري لـ @${username}`, 'info');
+            setTimeout(() => { loadPosts(); loadStats(); }, 5000);
+        }
+
+        async function pauseAccount(username) {
+            if (!confirm(`إيقاف مراقبة @${username} مؤقتاً؟`)) return;
+            await fetch(`/accounts/${username}/pause`, { method: 'PATCH', headers });
+            showToast(`تم إيقاف @${username} مؤقتاً`);
+            loadAccounts();
+        }
+
+        async function deleteAccount(username) {
+            if (!confirm(`حذف @${username} من المراقبة نهائياً؟`)) return;
+            await fetch(`/accounts/${username}`, { method: 'DELETE', headers });
+            showToast(`تم حذف @${username}`);
+            loadAccounts();
+            loadStats();
+        }
+
+        // Init
+        loadStats();
+        loadAccounts();
+        loadPosts();
+
+        // Auto refresh
+        setInterval(() => { loadStats(); loadAccounts(); loadPosts(); }, 30000);
+    </script>
+</body>
+</html>

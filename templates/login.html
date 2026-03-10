@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Monitor — تسجيل الدخول</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Tajawal', sans-serif; }
+        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+        .glow { box-shadow: 0 0 40px rgba(29,155,240,0.15); }
+        input:focus { box-shadow: 0 0 0 2px rgba(29,155,240,0.5); }
+    </style>
+</head>
+<body class="bg-[#0a0a0f] min-h-screen flex items-center justify-center p-4">
+    <!-- Background effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 -right-20 w-72 h-72 bg-blue-500/10 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-1/4 -left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-[100px]"></div>
+    </div>
+
+    <div class="relative w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 mb-4 shadow-lg shadow-blue-500/20">
+                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-800 text-white">X-Monitor</h1>
+            <p class="text-gray-400 mt-1 text-sm">نظام رصد الحسابات اللحظي</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="glass rounded-2xl p-8 glow">
+            <h2 class="text-xl font-700 text-white mb-6 text-center">تسجيل الدخول</h2>
+
+            {% if error %}
+            <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-3 mb-5 text-center">
+                <p class="text-red-400 text-sm">{{ error }}</p>
+            </div>
+            {% endif %}
+
+            <form method="POST" action="/login" class="space-y-5">
+                <div>
+                    <label class="block text-gray-300 text-sm font-500 mb-2">اسم المستخدم</label>
+                    <input type="text" name="username" required autocomplete="username"
+                           class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 outline-none transition-all duration-200 focus:border-blue-500/50"
+                           placeholder="أدخل اسم المستخدم">
+                </div>
+                <div>
+                    <label class="block text-gray-300 text-sm font-500 mb-2">كلمة المرور</label>
+                    <input type="password" name="password" required autocomplete="current-password"
+                           class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 outline-none transition-all duration-200 focus:border-blue-500/50"
+                           placeholder="أدخل كلمة المرور">
+                </div>
+                <button type="submit"
+                        class="w-full bg-gradient-to-l from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-700 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40">
+                    دخول
+                </button>
+            </form>
+        </div>
+
+        <p class="text-center text-gray-600 text-xs mt-6">X-Monitor v1.0.0</p>
+    </div>
+</body>
+</html>

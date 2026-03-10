@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+
+# Environment
+.env
+*.db
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.venv
+venv
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Dev/Test files
+webhook_receiver.py
+test_api.py
+cookies.json.example
+README.md
+*.md

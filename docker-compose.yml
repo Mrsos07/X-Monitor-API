@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  x-monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: x-monitor:latest
+    container_name: x-monitor
+    restart: unless-stopped
+
+    ports:
+      - "${APP_PORT:-8000}:8000"
+
+    volumes:
+      - ./cookies.json:/app/cookies.json:ro
+      - xmonitor-data:/app/data
+      - ./.env:/app/.env:ro
+
+    env_file:
+      - .env
+
+    environment:
+      - BROWSER_HEADLESS=true
+      - DB_PATH=/app/data/x_monitor.db
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1.0"
+        reservations:
+          memory: 256M
+
+    security_opt:
+      - no-new-privileges:true
+
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+
+volumes:
+  xmonitor-data:
+    driver: local

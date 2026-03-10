@@ -71,11 +71,15 @@ WORKDIR /app
 # نسخ الكود
 COPY --chown=xmonitor:xmonitor . .
 
-# إنشاء مجلد البيانات
-RUN mkdir -p /app/data && chown -R xmonitor:xmonitor /app/data
+# إنشاء مجلد البيانات مع صلاحيات كاملة
+RUN mkdir -p /app/data && \
+    chown -R xmonitor:xmonitor /app /app/data && \
+    chmod 755 /app/data
 
 # حذف الملفات غير الضرورية
 RUN rm -f cookies.json.example webhook_receiver.py test_api.py 2>/dev/null || true
+
+VOLUME ["/app/data"]
 
 # التبديل للمستخدم غير الجذري
 USER xmonitor

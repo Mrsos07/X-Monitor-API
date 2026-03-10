@@ -5,13 +5,17 @@
 
 import aiosqlite
 import json
+import os
 from datetime import datetime
+from pathlib import Path
 from typing import List, Optional, Dict, Any
 from loguru import logger
 from config import settings
 
 
 DB = settings.DB_PATH
+# التأكد من وجود المجلد الأب لقاعدة البيانات
+Path(DB).parent.mkdir(parents=True, exist_ok=True)
 
 
 # ─────────────────────────────────────────────────────────────

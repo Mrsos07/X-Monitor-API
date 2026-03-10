@@ -22,7 +22,8 @@ LABEL maintainer="X-Monitor" \
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     BROWSER_HEADLESS=true \
-    DEBIAN_FRONTEND=noninteractive
+    DEBIAN_FRONTEND=noninteractive \
+    PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers
 
 # تثبيت مكتبات النظام + تنظيف
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -61,7 +62,8 @@ COPY --from=builder /install /usr/local
 
 # تثبيت Playwright Chromium
 RUN playwright install chromium \
-    && playwright install-deps chromium 2>/dev/null || true
+    && playwright install-deps chromium 2>/dev/null || true \
+    && chmod -R 755 /opt/pw-browsers
 
 # إنشاء مستخدم غير جذري
 RUN groupadd -r xmonitor && useradd -r -g xmonitor -m -s /bin/bash xmonitor

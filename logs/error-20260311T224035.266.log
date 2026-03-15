@@ -1,0 +1,99 @@
+INFO:     Started server process [7136]
+INFO:     Waiting for application startup.
+2026-03-11 15:21:40.122 | INFO     | main:lifespan:33 - \U0001f680 \u0628\u062f\u0621 \u062a\u0634\u063a\u064a\u0644 X-Monitor ...
+2026-03-11 15:21:40.138 | INFO     | database:init_db:75 - \u2705 \u0642\u0627\u0639\u062f\u0629 \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u062c\u0627\u0647\u0632\u0629
+2026-03-11 15:21:40.138 | INFO     | browser:init_browser:39 - \U0001f680 \u062a\u0634\u063a\u064a\u0644 \u0627\u0644\u0645\u062a\u0635\u0641\u062d ...
+2026-03-11 15:21:40.888 | INFO     | browser:init_browser:64 - \U0001f36a \u062a\u062d\u0645\u064a\u0644 7 \u0643\u0648\u0643\u064a\u0632 \u0645\u0646 cookies.json
+2026-03-11 15:21:41.013 | SUCCESS  | browser:init_browser:81 - \u2705 \u0627\u0644\u0645\u062a\u0635\u0641\u062d \u062c\u0627\u0647\u0632
+2026-03-11 15:21:41.028 | SUCCESS  | monitor:start_monitor:38 - \U0001f7e2 \u0645\u062d\u0631\u0643 \u0627\u0644\u0645\u0631\u0627\u0642\u0628\u0629 \u0628\u062f\u0623
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-03-11 15:21:41.028 | INFO     | monitor:_supervisor_loop:68 - \u25b6\ufe0f  \u0628\u062f\u0621 \u0645\u0631\u0627\u0642\u0628\u0629 @nfoud_ai
+2026-03-11 15:21:41.028 | INFO     | monitor:_monitor_account_loop:93 - \U0001f441  \u0645\u0631\u0627\u0642\u0628\u0629 @nfoud_ai  (\u0643\u0644 60\u062b)
+2026-03-11 15:21:41.159 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:21:49.024 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:21:49.069 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:22:49.204 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:22:55.763 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:22:55.802 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:23:55.924 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:24:02.614 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:24:02.655 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:24:38.777 | INFO     | main:login_submit:463 - \U0001f511 \u062a\u0633\u062c\u064a\u0644 \u062f\u062e\u0648\u0644 \u0646\u0627\u062c\u062d \u0645\u0646 \u0648\u0627\u062c\u0647\u0629 \u0627\u0644\u0625\u062f\u0627\u0631\u0629
+2026-03-11 15:25:02.771 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:25:09.269 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:25:09.298 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+WARNING:  Invalid HTTP request received.
+WARNING:  Invalid HTTP request received.
+2026-03-11 15:26:09.438 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+WARNING:  Invalid HTTP request received.
+WARNING:  Invalid HTTP request received.
+2026-03-11 15:26:16.134 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:26:16.188 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:27:16.315 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:27:23.842 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:27:23.901 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:28:24.018 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:28:30.759 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 0 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:28:32.186 | INFO     | main:login_submit:463 - \U0001f511 \u062a\u0633\u062c\u064a\u0644 \u062f\u062e\u0648\u0644 \u0646\u0627\u062c\u062d \u0645\u0646 \u0648\u0627\u062c\u0647\u0629 \u0627\u0644\u0625\u062f\u0627\u0631\u0629
+2026-03-11 15:29:30.894 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:29:37.489 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:29:37.526 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:30:37.646 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:30:44.164 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:30:44.191 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:31:44.308 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:31:50.938 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:31:50.965 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:32:51.082 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:32:57.009 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 0 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:33:57.132 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:34:03.641 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:34:03.678 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:35:03.778 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:35:10.294 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 0 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:36:10.450 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:36:16.889 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:36:16.958 | SUCCESS  | monitor:_check_account:161 - \U0001f195 @nfoud_ai: 2 \u0645\u0646\u0634\u0648\u0631 \u062c\u062f\u064a\u062f! \u2192 \u0625\u0631\u0633\u0627\u0644 webhook
+2026-03-11 15:37:18.055 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:37:24.913 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:37:24.965 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:38:25.080 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:38:31.917 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:38:31.954 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+2026-03-11 15:39:32.065 | DEBUG    | browser:fetch_user_posts:184 - \U0001f4e1 \u0641\u062a\u062d: https://x.com/nfoud_ai
+2026-03-11 15:39:38.884 | INFO     | browser:fetch_user_posts:199 - \u2705 @nfoud_ai: \u062c\u064f\u0644\u0628\u062a 2 \u062a\u063a\u0631\u064a\u062f\u0629
+2026-03-11 15:39:38.921 | DEBUG    | monitor:_check_account:144 - \U0001f501 @nfoud_ai: \u0644\u0627 \u062c\u062f\u064a\u062f
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-11 15:40:35.125 | INFO     | main:lifespan:37 - \U0001f6d1 \u0625\u064a\u0642\u0627\u0641 X-Monitor ...
+2026-03-11 15:40:35.125 | INFO     | monitor:stop_monitor:47 - \u23f9  \u0625\u064a\u0642\u0627\u0641 \u0645\u0631\u0627\u0642\u0628\u0629 @nfoud_ai
+2026-03-11 15:40:35.141 | INFO     | browser:close_browser:156 - \U0001f6d1 \u0627\u0644\u0645\u062a\u0635\u0641\u062d \u0623\u064f\u063a\u0644\u0642
+2026-03-11 15:40:35.141 | WARNING  | monitor:stop_monitor:50 - \U0001f534 \u0645\u062d\u0631\u0643 \u0627\u0644\u0645\u0631\u0627\u0642\u0628\u0629 \u0623\u064f\u0648\u0642\u0641
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7136]
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\main.py", line 486, in <module>
+    uvicorn.run(
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\venv\Lib\site-packages\uvicorn\main.py", line 575, in run
+    server.run()
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\venv\Lib\site-packages\uvicorn\server.py", line 65, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt

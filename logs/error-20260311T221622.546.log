@@ -1,0 +1,47 @@
+INFO:     Started server process [5924]
+INFO:     Waiting for application startup.
+2026-03-11 15:16:21.765 | INFO     | main:lifespan:33 - \U0001f680 \u0628\u062f\u0621 \u062a\u0634\u063a\u064a\u0644 X-Monitor ...
+2026-03-11 15:16:21.765 | INFO     | database:init_db:75 - \u2705 \u0642\u0627\u0639\u062f\u0629 \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u062c\u0627\u0647\u0632\u0629
+2026-03-11 15:16:21.765 | INFO     | browser:init_browser:39 - \U0001f680 \u062a\u0634\u063a\u064a\u0644 \u0627\u0644\u0645\u062a\u0635\u0641\u062d ...
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\venv\Lib\site-packages\starlette\routing.py", line 732, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\main.py", line 35, in lifespan
+    await monitor.start_monitor()
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\monitor.py", line 37, in start_monitor
+    await browser.init_browser()
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\browser.py", line 41, in init_browser
+    _browser    = await _playwright.chromium.launch(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\venv\Lib\site-packages\playwright\async_api\_generated.py", line 13957, in launch
+    await self._impl_obj.launch(
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\venv\Lib\site-packages\playwright\_impl\_browser_type.py", line 94, in launch
+    Browser, from_channel(await self._channel.send("launch", params))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\venv\Lib\site-packages\playwright\_impl\_connection.py", line 59, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\qou\X-Monitor-API\venv\Lib\site-packages\playwright\_impl\_connection.py", line 514, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at C:\Windows\system32\config\systemprofile\AppData\Local\ms-playwright\chromium-1117\chrome-win\chrome.exe
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551 Looks like Playwright was just installed or updated.       \u2551
+\u2551 Please run the following command to download new browsers: \u2551
+\u2551                                                            \u2551
+\u2551     playwright install                                     \u2551
+\u2551                                                            \u2551
+\u2551 <3 Playwright Team                                         \u2551
+\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
+
+ERROR:    Application startup failed. Exiting.
+Exception ignored in: <function BaseSubprocessTransport.__del__ at 0x000002A0E5558A40>
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_subprocess.py", line 126, in __del__
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_subprocess.py", line 104, in close
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\asyncio\proactor_events.py", line 109, in close
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 762, in call_soon
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 520, in _check_closed
+RuntimeError: Event loop is closed

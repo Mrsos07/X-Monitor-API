@@ -94,7 +94,7 @@ async def _monitor_account_loop(account: Dict):
 
     while _monitor_active:
         try:
-            await _check_account(username, account.get("webhook_url"))
+            await _check_account(username, account.get("webhook_url"), send_webhooks=True)
         except asyncio.CancelledError:
             logger.info(f"❌ إلغاء مراقبة @{username}")
             break
@@ -123,7 +123,11 @@ async def _monitor_account_loop(account: Dict):
 #  فحص حساب واحد ومعالجة التغريدات
 # ─────────────────────────────────────────────────────────────
 
-async def _check_account(username: str, account_webhook: str = None):
+async def _check_account(
+    username: str,
+    account_webhook: str = None,
+    send_webhooks: bool = True   # ✅ الجديد: تحكم في إرسال webhook
+):
     # جلب التغريدات من المتصفح
     raw_posts = await browser.fetch_user_posts(
         username, max_posts=settings.MAX_POSTS_PER_FETCH
@@ -132,7 +136,7 @@ async def _check_account(username: str, account_webhook: str = None):
         await db.update_last_checked(username)
         return
 
-    # تحديد التغريدات الجديدة فقط
+    # تحديد التغريدات الجديدة فقط (غير موجودة في قاعدة البيانات)
     known_ids = await db.get_known_tweet_ids(username)
     new_posts  = [p for p in raw_posts if p["tweet_id"] not in known_ids]
 
@@ -141,28 +145,39 @@ async def _check_account(username: str, account_webhook: str = None):
         await db.update_last_checked(username)
         return
 
-    logger.success(f"🆕 @{username}: {len(new_posts)} منشور جديد!")
-
-    # حفظ في قاعدة البيانات
+    # حفظ في قاعدة البيانات أولاً
     saved = await db.save_posts(new_posts)
-    if saved > 0:
-        await db.increment_posts_count(username, saved)
 
-    # إرسال Webhook
-    await webhook_sender.dispatch_new_posts(new_posts)
+    if saved == 0:
+        # لم يُحفظ شيء جديد فعلياً (تعارض INSERT OR IGNORE)
+        logger.debug(f"🔁 @{username}: تم الحفظ مسبقاً، لا webhook")
+        await db.update_last_checked(username)
+        return
 
-    # Webhook مخصص للحساب إن وُجد
-    if account_webhook:
-        for post in new_posts:
+    await db.increment_posts_count(username, saved)
+
+    # ✅ إرسال Webhook فقط إذا كان send_webhooks=True
+    if send_webhooks:
+        logger.success(f"🆕 @{username}: {saved} منشور جديد! → إرسال webhook")
+
+        # Webhook العام
+        await webhook_sender.dispatch_new_posts(new_posts[:saved])
+
+        # Webhook مخصص للحساب إن وُجد
+        if account_webhook:
             import httpx
-            try:
-                async with httpx.AsyncClient(timeout=10) as client:
-                    await client.post(
-                        account_webhook,
-                        json={"event": "new_post", "data": post},
-                    )
-            except Exception as e:
-                logger.warning(f"⚠️  Webhook الحساب فشل: {e}")
+            for post in new_posts[:saved]:
+                try:
+                    async with httpx.AsyncClient(timeout=10) as client:
+                        await client.post(
+                            account_webhook,
+                            json={"event": "new_post", "data": post},
+                        )
+                except Exception as e:
+                    logger.warning(f"⚠️  Webhook الحساب فشل: {e}")
+    else:
+        # الجلبة الأولى — تخزين فقط بدون webhook
+        logger.info(f"📥 @{username}: تم تخزين {saved} تغريدة أولية (بدون webhook)")
 
     await db.update_last_checked(username)
 
@@ -172,8 +187,16 @@ async def _check_account(username: str, account_webhook: str = None):
 # ─────────────────────────────────────────────────────────────
 
 async def immediate_check(username: str):
-    """يُستدعى عند إضافة حساب جديد لجلب أول دفعة فوراً"""
+    """
+    يُستدعى عند إضافة حساب جديد.
+    ✅ يجلب التغريدات الموجودة ويخزنها فقط — بدون إرسال webhook.
+    بعدها سيُرسل webhook فقط للتغريدات الجديدة الفعلية.
+    """
     acc = await db.get_account(username)
     if not acc:
         return
-    await _check_account(username, acc.get("webhook_url"))
+    await _check_account(
+        username,
+        acc.get("webhook_url"),
+        send_webhooks=False   # ✅ الأول جلبة = تخزين فقط
+    )
